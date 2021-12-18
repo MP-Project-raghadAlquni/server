@@ -24,5 +24,5 @@
 - **spam one doctor or patient:** As a Admin I can spam(Soft Delete) any patient or doctor
 
 ## UML Diagram
-![Screenshot](blob:https://app.diagrams.net/152b5ca0-b060-4ae2-9d4b-4994e21c1dee)
+![UML](https://user-images.githubusercontent.com/92247958/146652653-9ee5b901-8062-443e-baf4-cdf60b7d4d9c.png)
 
