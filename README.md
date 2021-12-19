@@ -42,8 +42,8 @@
 
 ![ER Diagram](https://user-images.githubusercontent.com/92247958/146652683-17829479-c00c-4cce-842d-6c1914a9e527.png)
 
-
-## Role Schema
+## Modules
+**Role Schema**
 ```bash
 {
 role: { type : String },
@@ -51,7 +51,7 @@ permission:  { type :Array }
 }
 ```
 
-## User Schema
+**User Schema**
 ```bash
 {
   fileNumber: { type : String, required: true, unique: true },
@@ -66,7 +66,7 @@ permission:  { type :Array }
 }
 ```
 
-## Readings Schema
+**Readings Schema**
 ```bash
 {
   beforeBreakfast: { type : String },
@@ -83,7 +83,7 @@ permission:  { type :Array }
 }
 ```
 
-## Appointment Schema
+**Appointment Schema**
 ```bash
 {
 Date: { type : Date, required: true },
@@ -93,7 +93,7 @@ clinic: { type : String },
 }
 ```
 
-## Doses Schema
+**Doses Schema**
 ```bash
 {
 insulineType1: { type : String },
