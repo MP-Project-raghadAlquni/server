@@ -50,7 +50,7 @@ Backend for a Readings site built in Express.js, that facilitates the diabetic p
   <h1> Entity Relationship (ER) Digram </h1>
 </div>
 
-![ER Diagram](https://user-images.githubusercontent.com/92247958/146652683-17829479-c00c-4cce-842d-6c1914a9e527.png)
+<img width="814" alt="Screen Shot 1443-05-15 at 6 36 02 PM" src="https://user-images.githubusercontent.com/92247958/146683083-17819434-08aa-49a2-9378-bd945f3cf862.png">
 
 # Modules
 **Role Schema**
