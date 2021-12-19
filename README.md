@@ -1,6 +1,11 @@
 <div align="center">
   <h1> Diabetes Readings Site (server side) </h1>
+  
+  ![DiabetesLogo](https://user-images.githubusercontent.com/92247958/146681227-13c71bdc-a9f8-4595-ba40-9c4b1b2511fd.png)
+
 </div>
+
+
 
 ## User Stories
 * Register: As a new doctor I can sign up in the platform
