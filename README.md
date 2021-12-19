@@ -2,6 +2,8 @@
   <h1> Diabetes Readings Site (server side) </h1>
   
 ![DiabetesLogo](https://user-images.githubusercontent.com/92247958/146681443-c89c5571-9edc-4c80-a4de-68a1a4b9566a.png)
+ 
+<img width="614" alt="Screen Shot 1443-05-15 at 7 47 23 PM" src="https://user-images.githubusercontent.com/92247958/146683311-e777b7f2-b28a-48ff-b2d7-d62cac0cf70f.png">
 
 </div>
 
