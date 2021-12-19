@@ -1,5 +1,5 @@
 <div align="center">
-  <h1> diabetes Readings Site (server side) </h1>
+  <h1> Diabetes Readings Site (server side) </h1>
 </div>
 
 ## User Stories
