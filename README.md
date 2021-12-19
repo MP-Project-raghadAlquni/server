@@ -1,7 +1,7 @@
 <div align="center">
   <h1> Diabetes Readings Site (server side) </h1>
   
-  <img src= "user-images.githubusercontent.com/92247958/146681227-13c71bdc-a9f8-4595-ba40-9c4b1b2511fd.png" width="200" height="400" )
+![DiabetesLogo](https://user-images.githubusercontent.com/92247958/146681443-c89c5571-9edc-4c80-a4de-68a1a4b9566a.png {width=40px height=400px})
 
 </div>
 
