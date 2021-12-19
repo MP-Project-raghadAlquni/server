@@ -3,7 +3,6 @@
  
 <img width="514" alt="Screen Shot 1443-05-15 at 7 47 23 PM" src="https://user-images.githubusercontent.com/92247958/146681443-c89c5571-9edc-4c80-a4de-68a1a4b9566a.png">
 </div>
-https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black
 
 # Descreption
 Backend for a Readings site built in Express.js, that facilitates the diabetic patient to send daily blood sugar level readings to the doctor, providing faster communication between the doctor and the diabetic patient, and following up the patient’s condition and blood sugar level daily or weekly by the doctor.
