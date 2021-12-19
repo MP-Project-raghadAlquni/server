@@ -4,7 +4,7 @@
 * Register: As a new doctor I can sign up in the platform
 * Login: As a patient or doctor in this hospital, I can log in to the platform to add my readings as a patient or check patients' sugar level and adjust their doses as a doctor.
 * Logout:  As a patient I can logout from the platform so no one else can use it
-* As a (Patient-Doctor-Admin)
+* As a (Patient-Doctor-Admin) you can:
    * As a patient you can:
         * Edit patient: As a patient I can edit my profile
         * Add Readings: As a patient, I can add my readings
@@ -27,7 +27,12 @@
         * Get one doctor or patient: For Admin.
         * spam one doctor or patient: As a Admin I can spam(Soft Delete) any patient or doctor
 
-## UML Diagram
+# Planning And Analysis
+
+
+<div align="center">
+  <h1> UML Digram </h1>
+</div>
 ![UML](https://user-images.githubusercontent.com/92247958/146652653-9ee5b901-8062-443e-baf4-cdf60b7d4d9c.png)
 
 ## ER Diagram
