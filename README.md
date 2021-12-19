@@ -44,7 +44,7 @@ Backend for a Readings site built in Express.js, that facilitates the diabetic p
 </div>
 
 
-<img width="1440" alt="Screen Shot 1443-05-15 at 6 24 07 PM" src="https://user-images.githubusercontent.com/92247958/146682963-7ea47e01-2c2b-4edd-9495-d3207a5c2dde.png">
+<img width="1019" alt="Screen Shot 1443-05-15 at 6 29 12 PM" src="https://user-images.githubusercontent.com/92247958/146683016-698c5f83-6add-46a7-9578-82488afddc36.png">
 
 <div align="center">
   <h1> Entity Relationship (ER) Digram </h1>
