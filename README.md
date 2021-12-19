@@ -43,8 +43,15 @@
 ![ER Diagram](https://user-images.githubusercontent.com/92247958/146652683-17829479-c00c-4cce-842d-6c1914a9e527.png)
 
 
-## Schema User
+## Role Schema
+```bash
+{
+role: { type : String },
+permission:  { type :Array }
+}
+```
 
+## User Schema
 ```bash
 {
   fileNumber: { type : String, required: true, unique: true },
@@ -59,4 +66,38 @@
 }
 ```
 
+## Readings Schema
+```bash
+{
+  beforeBreakfast: { type : String },
+  afterBreakfast: { type : String },
+  beforeLunch: { type : String },
+  afterLunch: { type : String },
+  beforeDinner: { type : String },
+  afterDinner: { type : String },
+  beforeSleep: { type : String },
+  isDel: { type : Boolean, default: false },
+  isRead: { type : Boolean, default: false },
+  byUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
+  Date: { type : Date, default: Date.now },
+}
+```
 
+## Appointment Schema
+```bash
+{
+Date: { type : Date, required: true },
+forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
+byDoctor: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
+clinic: { type : String },
+}
+```
+
+## Doses Schema
+```bash
+{
+insulineType1: { type : String },
+insulineType2: { type : String },
+forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
+}
+```
