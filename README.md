@@ -90,6 +90,8 @@ Date: { type : Date, required: true },
 forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 byDoctor: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 clinic: { type : String },
+isDone: { type : Boolean, default: false },
+
 }
 ```
 
