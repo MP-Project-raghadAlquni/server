@@ -6,6 +6,8 @@
 </div>
 
 
+# Descreption
+Backend for a Readings site built in Express.js, that facilitates the diabetic patient to send daily blood sugar level readings to the doctor, providing faster communication between the doctor and the diabetic patient, and following up the patient’s condition and blood sugar level daily or weekly by the doctor.
 
 ## User Stories
 * Register: As a new doctor I can sign up in the platform
