@@ -144,6 +144,7 @@ forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
 | GET              | `/allAppointments`   |`Authentication`                 | Get all appointment for User or Doctor                       |
+| GET              | `/allDoneAppointment`|`Authentication`                 | Get all appointment isDone or old                            |
 | POST             | `/addAppointment`    |`Authentication & Authorization` | Add new appointment for User By Doctor                       |
 
 * **Doses Route**
