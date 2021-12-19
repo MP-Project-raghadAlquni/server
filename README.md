@@ -12,7 +12,7 @@ Backend for a Readings site built in Express.js, that facilitates the diabetic p
 
 ![MONGODB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
 
-![Node.js](https://img.shields.io/badge/Node.js-4285F4?style=for-the-badge&logo=node.js&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-007ACC?style=for-the-badge&logo=node.js&logoColor=white)
 
 
 
