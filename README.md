@@ -36,6 +36,10 @@
 
 ![UML](https://user-images.githubusercontent.com/92247958/146652653-9ee5b901-8062-443e-baf4-cdf60b7d4d9c.png)
 
+<div align="center">
+  <h1> ER Model Digram</h1>
+</div>
+
 ## ER Diagram
 ![ER Diagram](https://user-images.githubusercontent.com/92247958/146652683-17829479-c00c-4cce-842d-6c1914a9e527.png)
 
