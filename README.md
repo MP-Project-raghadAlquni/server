@@ -1,9 +1,9 @@
 <div align="center">
   <h1> Diabetes Readings Site (server side) </h1>
   
-![DiabetesLogo](https://user-images.githubusercontent.com/92247958/146681443-c89c5571-9edc-4c80-a4de-68a1a4b9566a.png)
- 
-<img width="614" alt="Screen Shot 1443-05-15 at 7 47 23 PM" src="https://user-images.githubusercontent.com/92247958/146681443-c89c5571-9edc-4c80-a4de-68a1a4b9566a.png">
+<!-- ![DiabetesLogo](https://user-images.githubusercontent.com/92247958/146681443-c89c5571-9edc-4c80-a4de-68a1a4b9566a.png)
+  -->
+<img width="514" alt="Screen Shot 1443-05-15 at 7 47 23 PM" src="https://user-images.githubusercontent.com/92247958/146681443-c89c5571-9edc-4c80-a4de-68a1a4b9566a.png">
 
 </div>
 
