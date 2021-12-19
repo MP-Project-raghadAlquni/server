@@ -102,7 +102,7 @@ forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 }
 ```
 # Routes
-* Role Route 
+* **Role Route**
 
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
@@ -110,7 +110,7 @@ forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 | GET              | `/getRoles`          | `Authentication & Authorization`| Get all Role                                                 |
 
 
-* User Route
+* **User Route**
 
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
@@ -126,7 +126,7 @@ forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 | GET              | `/getPatientById`    |`Authentication`                 | To get OneDoctor by user Id                                  |
 
 
-* Readings Route 
+* **Readings Route**
 
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
@@ -137,14 +137,14 @@ forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 | PUT              | `/editingReadingId`  |`Authentication`                 | To editing readings                                          |
 | DELETE           | `/deleteReadings`    |`Authentication`                 | To editing Patient informtion By Id                          |
 
-* Appointment Route
+* **Appointment Route**
 
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
 | GET              | `/allAppointments`   |`Authentication`                 | Get all appointment for User or Doctor                       |
 | POST             | `/addAppointment`    |`Authentication & Authorization` | Add new appointment for User By Doctor                       |
 
-* Doses Route
+* **Doses Route**
 
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
