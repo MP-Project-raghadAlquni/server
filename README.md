@@ -40,9 +40,23 @@
   <h1> ER Model Digram</h1>
 </div>
 
-## ER Diagram
 ![ER Diagram](https://user-images.githubusercontent.com/92247958/146652683-17829479-c00c-4cce-842d-6c1914a9e527.png)
 
-User Schema
+
+## Schema User
+
+```bash
+{
+  fileNumber: { type : String, required: true, unique: true },
+  avatar: { type : String, defalt: "" },
+  fullName: { type : String, require: true },
+  password: { type : String, require: true, defult: "12345" },
+  role: { type : mongoose.Schema.Types.ObjectId, ref: "Role" },
+  phoneNumber: { type : Boolean , defalt: false },
+  age: { type : Number },
+  doctor: { type : String } ,
+  isDel: { type : Boolean, default: false },
+}
+```
 
 
