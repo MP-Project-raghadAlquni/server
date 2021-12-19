@@ -45,8 +45,7 @@ Backend for a Readings site built in Express.js, that facilitates the diabetic p
   <h1> Unified Modeling Language (UML) Digram </h1>
 </div>
 
-
-<img width="1019" alt="Screen Shot 1443-05-15 at 6 29 12 PM" src="https://user-images.githubusercontent.com/92247958/146683016-698c5f83-6add-46a7-9578-82488afddc36.png">
+<img width="798" alt="UML2" src="https://user-images.githubusercontent.com/92247958/146686331-37d8f90c-03dc-4d4d-83e3-1f6756821764.png">
 
 <div align="center">
   <h1> Entity Relationship (ER) Digram </h1>
