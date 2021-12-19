@@ -111,6 +111,7 @@ forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 
 
 * User Route
+
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
 | POST             | `/doctroRegister`    | Public                          | Create new Doctor                                            |
@@ -125,7 +126,8 @@ forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 | GET              | `/getPatientById`    |`Authentication`                 | To get OneDoctor by user Id                                  |
 
 
-* Readings Route
+* Readings Route 
+
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
 | POST             | `/addReadings`       |`Authentication`                 | Add new readings                                             |
@@ -136,12 +138,14 @@ forUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
 | DELETE           | `/deleteReadings`    |`Authentication`                 | To editing Patient informtion By Id                          |
 
 * Appointment Route
+
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
 | GET              | `/allAppointments`   |`Authentication`                 | Get all appointment for User or Doctor                       |
 | POST             | `/addAppointment`    |`Authentication & Authorization` | Add new appointment for User By Doctor                       |
 
 * Doses Route
+
 | HTTP METHOD      | Paths                | Permissions                     | Behavior                                                     |
 | ---------------- | -------------------- | --------------------------------| ------------------------------------------------------------ |
 | GET              | `/getDoses`          |`Authentication`                 | Get all appointment for User or Doctor                       |
