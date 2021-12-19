@@ -1,4 +1,6 @@
-# Diabetes readings
+<div align="center">
+  <h1> diabetes Readings Site (server side) </h1>
+</div>
 
 ## User Stories
 * Register: As a new doctor I can sign up in the platform
