@@ -96,18 +96,33 @@ const doctorlogin = (req, res) => {
 };
 
 const getAllDoctor = (req, res) => {
-    userModel
+  userModel
     .find({ role: process.env.DOCTOR_ROLE })
     .then((result) => {
-        if (result) {
-            console.log(result);
-            res.status(200).json(result);
-    } 
+      if (result) {
+        console.log(result);
+        res.status(200).json(result);
+      }
     })
     .catch((err) => {
       res.status(400).json(err);
     });
-}
+};
 
+const getAllDoctorBinding = (req, res) => {
+  userModel
+    .find({ role: process.env.DOCTOR_ROLE, status: process.env.PENDING_STATUS })
+    .then((result) => {
+      if (result.length > 0) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(400).json("there is no pendings users!!");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
 
-module.exports = { signUp, doctorlogin, getAllDoctor };
+module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding };
