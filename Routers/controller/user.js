@@ -7,75 +7,86 @@ const secret = process.env.SECRET_KEY;
 
 // register for ""doctor"" only
 const signUp = async (req, res) => {
-  const { fileNumber, password, fullName, verificationNum } = req.body;
+  const { password, fullName, email, fileNumber } = req.body;
   const salt = Number(process.env.SALT);
-
   const savedFullName = fullName.toLowerCase();
 
-  const found = await userModel.findOne({ fileNumber: fileNumber });
+  const found = await userModel.findOne({ email: email });
 
   if (!found) {
     const savedPassword = await bcrypt.hash(password, salt);
 
-    if (verificationNum === "15120") {
-      const newUser = new userModel({
-        fileNumber,
-        fullName: savedFullName,
-        password: savedPassword,
-        verificationNum,
-        role: "61c087973bd70fbf7ad59b52",
+    const newUser = new userModel({
+      fileNumber,
+      email,
+      fullName: savedFullName,
+      password: savedPassword,
+      role: "61c087973bd70fbf7ad59b52",
+      status: "61c1b7640e3910e1130d4b07",
+    });
+
+    newUser
+      .save()
+      .then((result) => {
+        res.status(201).json(result);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
       });
-      newUser
-        .save()
-        .then((result) => {
-          res.status(201).json(result);
-        })
-        .catch((err) => {
-          res.status(400).json(err);
-        });
-    } else {
-      res.json({
-        message: "The verification Number is wrong.",
-      });
-    }
   } else {
     res.json({
-      message: "This file Number was registered.",
+      message: "This email was registered.",
     });
   }
 };
 
-// LOGIN (FOR PATIENT AND DOCTOR)
-const login = (req, res) => {
-  const { fileNumber, password } = req.body;
+// LOGIN (for doctor only)
+const doctorlogin = (req, res) => {
+  const { password, email } = req.body;
 
   userModel
-    .findOne({ fileNumber })
-    .populate("role")
+    .findOne({ email })
+    .populate("role status")
     .then(async (result) => {
       if (result) {
-        if (result.fileNumber == fileNumber) {
+        console.log(result);
+        if (result.email == email && result.status.status == "pending") {
+          res.status(400).json("Status of your request: pending");
+        } else if (
+          result.email == email &&
+          result.status.status == "rejected"
+        ) {
+          res
+            .status(400)
+            .json(
+              "The required information is incomplete, you must complete it"
+            );
+        } else if (
+          result.email == email &&
+          result.status.status == "accepted"
+        ) {
           const hashedPass = await bcrypt.compare(password, result.password);
           const payload = {
             id: result._id,
-            fileNumber: result.fileNumber,
+            email: result.email,
             fullName: result.fullName,
             role: result.role.role,
+            status: result.status.status,
           };
 
-          console.log(hashedPass);
+          console.log(hashedPass, "here");
 
           if (hashedPass) {
             let token = jwt.sign(payload, secret);
             res.status(200).json({ result, token });
           } else {
-            res.status(400).json("file number or password is wrong");
+            res.status(400).json("email or password is wrong");
           }
         } else {
-          res.status(400).json("file number or password is wrong");
+          res.status(400).json("email or password is wrong");
         }
       } else {
-        res.status(404).json("The user with this file number does not exist");
+        res.status(404).json("email does not exist");
       }
     })
     .catch((err) => {
@@ -84,4 +95,19 @@ const login = (req, res) => {
     });
 };
 
-module.exports = { signUp, login };
+const getAllDoctor = (req, res) => {
+    userModel
+    .find({ role: process.env.DOCTOR_ROLE })
+    .then((result) => {
+        if (result) {
+            console.log(result);
+            res.status(200).json(result);
+    } 
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+}
+
+
+module.exports = { signUp, doctorlogin, getAllDoctor };
