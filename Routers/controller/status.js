@@ -1,6 +1,6 @@
 const statusModel = require("./../../db/models/statusSchema");
 
-const addstatus = (req, res) => {
+const addstatus = async (req, res) => {
   const { status } = req.body;
   const newStatus = new statusModel({
     status,

@@ -178,5 +178,39 @@ const acceptedStatusUpdate = (req, res) => {
       });
 }
 
+const addPatient = async (req, res) => {
+  const {fileNumber, fullName, diabetesType,age} = req.body
+  const savedFullName = fullName.toLowerCase();
 
-module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate };
+  const found = await userModel.findOne({ fileNumber: fileNumber });
+
+  if(!found) {
+    const newPatient = new userModel({
+      fileNumber,
+      fullName: savedFullName,
+      age,
+      diabetesType,
+      role: "61c087a43bd70fbf7ad59b54",
+      status: process.env.NOT_VERIFIED_STATUS,
+      doctor: req.token.id,
+    })
+
+    newPatient
+    .save()
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+} else {
+  res.json({
+    message: "Patient with this File Number was registered.",
+  });
+}
+};
+   
+
+
+
+module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient };
