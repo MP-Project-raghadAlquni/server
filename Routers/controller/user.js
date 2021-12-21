@@ -128,7 +128,6 @@ const getAllDoctorBinding = (req, res) => {
 
 const rejectedStatusUpdate = (req, res) => {
     const { id } = req.params;
-    const { status_id } = req.body
 
     userModel
     .findOneAndUpdate(
@@ -137,7 +136,7 @@ const rejectedStatusUpdate = (req, res) => {
             _id: id,
         },
         {
-            status: status_id
+            status: process.env.REJECTED_STATUS
         
         }, {new: true}
     )
@@ -153,7 +152,31 @@ const rejectedStatusUpdate = (req, res) => {
       });
 }
 
+const acceptedStatusUpdate = (req, res) => {
+    const { id } = req.params;
+
+    userModel
+    .findOneAndUpdate(
+        {
+            status: process.env.PENDING_STATUS,
+            _id: id,
+        },
+        {
+            status: process.env.ACCEPTED_STATUS,
+        
+        }, {new: true}
+    )
+    .then((result) => {
+        if(result) {
+            res.status(200).json(result);
+        } else {
+            res.status(404).json("This user is rejected or deleted");
+        }
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+      });
+}
 
 
-
-module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate };
+module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate };
