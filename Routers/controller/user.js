@@ -1,6 +1,7 @@
 const userModel = require("../../db/models/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { status } = require("express/lib/response");
 require("dotenv").config();
 
 const secret = process.env.SECRET_KEY;
@@ -125,4 +126,34 @@ const getAllDoctorBinding = (req, res) => {
     });
 };
 
-module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding };
+const rejectedStatusUpdate = (req, res) => {
+    const { id } = req.params;
+    const { status_id } = req.body
+
+    userModel
+    .findOneAndUpdate(
+        {
+            status: process.env.PENDING_STATUS,
+            _id: id,
+        },
+        {
+            status: status_id
+        
+        }, {new: true}
+    )
+    .then((result) => {
+        if(result) {
+            res.status(200).json(result);
+        } else {
+            res.status(404).json("This user is accepted or deleted");
+        }
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+      });
+}
+
+
+
+
+module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate };
