@@ -2,6 +2,7 @@ const userModel = require("../../db/models/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { status } = require("express/lib/response");
+const { findOne } = require("../../db/models/userSchema");
 require("dotenv").config();
 
 const secret = process.env.SECRET_KEY;
@@ -64,7 +65,7 @@ const doctorlogin = (req, res) => {
             );
         } else if (
           result.email == email &&
-          result.status.status == "accepted"
+          result.status.status == "accepted" || result.status.status == "verified"
         ) {
           const hashedPass = await bcrypt.compare(password, result.password);
           const payload = {
@@ -209,8 +210,34 @@ const addPatient = async (req, res) => {
   });
 }
 };
+
    
+const compeleteRegister = async (req, res) => {
+  const { fileNumber, password, email } = req.body;
+  const salt = Number(process.env.SALT);
+  const savedPassword = await bcrypt.hash(password, salt);
 
+  userModel
+  .findOneAndUpdate({ fileNumber: fileNumber, status: process.env.NOT_VERIFIED_STATUS,
+  },
+  {
+    status: process.env.VERIFIED_STATUS,
+    password: savedPassword,
+    email: email,
 
+  }, {new: true}
+  )
+  .then((result) => {
+    if (result) {
+      res.status(200).json(result);
+      console.log(result);
+    } else {
+        res.status(400).json("your account is already verified ,you can Login now");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+})
+}
 
-module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient };
+module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister };
