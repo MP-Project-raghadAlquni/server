@@ -100,7 +100,7 @@ const doctorlogin = (req, res) => {
 // get all doctor
 const getAllDoctor = (req, res) => {
   userModel
-    .find({ role: process.env.DOCTOR_ROLE })
+    .find({ role: process.env.DOCTOR_ROLE , status: process.env.ACCEPTED_STATUS })
     .then((result) => {
       if (result) {
         console.log(result);
@@ -296,5 +296,45 @@ const editPatientProfile = async (req, res) => {
     });
 }
 
+// GET ALL VERIFIED PATIENTS
+const getAllVerfiedPtients = (req, res) => {
+  userModel
+    .find({ role: process.env.PATIENT_ROLE, status: process.env.VERIFIED_STATUS })
+    .then((result) => {
+      if (result) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({ message: "There is no patients yet!!"});
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
 
-module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile};
+// get all patient for one doctor
+const getAllPatientDoctor = (req, res) => {
+  const { doctorId } = req.params;
+  userModel
+    .find({ doctor: doctorId, status: process.env.VERIFIED_STATUS, role: process.env.PATIENT_ROLE })
+    .then((result) => {
+      console.log(result);
+      if (result.length > 0) {
+
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        console.log("here");
+        res.status(404).json({ message: `There is no patients with doctor has ID (${doctorId}) yet!!`});
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).json(err);
+    });
+}
+
+
+
+module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile, getAllVerfiedPtients, getAllPatientDoctor};
