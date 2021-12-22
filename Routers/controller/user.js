@@ -263,7 +263,7 @@ const getPatientById = async (req, res) => {
     .then((result) => {
       if (result) res.status(200).json(result);
       else
-        res.status(404).json({ message: "this patien is not verified yet!!" });
+        res.status(404).json({ message: "this patient is not verified yet!!" });
     })
     .catch((err) => {
       res.status(400).json(err);
@@ -288,7 +288,7 @@ const editPatientProfile = async (req, res) => {
     .findOneAndUpdate(
       {
         _id: req.token.id,
-        status: process.env.VERIFIED_STATUS,
+        status: process.env.VERIFIED_STATUS 
       },
       {
         avatar,
@@ -366,6 +366,7 @@ const getAllPatientDoctor = (req, res) => {
     });
 };
 
+
 const editDoctorProfile = async (req, res) => {
   const { doctorId } = req.params;
   const {
@@ -413,6 +414,49 @@ const editDoctorProfile = async (req, res) => {
     });
 };
 
+const spamUserFromAdmin = (req, res) => {
+  const { userId } = req.params;
+  userModel
+  .findOneAndUpdate(
+    {
+      id: userId,
+    },
+    {
+      status: process.env.SPAM_STATUS
+    },
+    { new: true}
+  )
+  .then((result) => {
+    if(result) {
+      res.status(200).json(result);
+    } else {
+      res
+          .status(404)
+          .json({
+            message: `There is no user with this ID: (${req.token.id}) or don't accepeted yet!!`,
+          });
+    }
+  })
+}
+
+
+const getAllUserForAdmin = (req, res) => {
+  userModel
+    .find({})
+    .then((result) => {
+      if (result) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({ message: "There is no User yet!!" });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+
 module.exports = {
   signUp,
   doctorlogin,
@@ -427,4 +471,6 @@ module.exports = {
   getAllVerfiedPtients,
   getAllPatientDoctor,
   editDoctorProfile,
+  spamUserFromAdmin,
+  getAllUserForAdmin
 };

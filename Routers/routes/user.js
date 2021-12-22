@@ -1,5 +1,5 @@
 const express = require("express");
-const { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile, getAllVerfiedPtients, getAllPatientDoctor, editDoctorProfile} = require("./../controller/user");
+const { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile, getAllVerfiedPtients, getAllPatientDoctor, editDoctorProfile, spamUserFromAdmin, getAllUserForAdmin } = require("./../controller/user");
 const userRouter = express.Router();
 
 const authentication = require("../middleware/authentication");
@@ -23,8 +23,9 @@ userRouter.get("/patient/:id", getPatientById)
 userRouter.put("/patientProfile", authentication , editPatientProfile);
 userRouter.get("/verfiedPtients", getAllVerfiedPtients);
 
-
-
+// for Admin
+userRouter.put("/spamUser/:id", authentication, authorization, spamUserFromAdmin);
+userRouter.get("/allUsers", authentication, authorization, getAllUserForAdmin);
 
 
 
