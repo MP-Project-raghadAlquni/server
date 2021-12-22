@@ -42,7 +42,7 @@ const signUp = async (req, res) => {
   }
 };
 
-// LOGIN (for doctor only)
+// LOGIN (for doctors & patients & admin)
 const doctorlogin = (req, res) => {
   const { password, email } = req.body;
 
@@ -97,6 +97,7 @@ const doctorlogin = (req, res) => {
     });
 };
 
+// get all doctor
 const getAllDoctor = (req, res) => {
   userModel
     .find({ role: process.env.DOCTOR_ROLE })
@@ -111,6 +112,7 @@ const getAllDoctor = (req, res) => {
     });
 };
 
+// get all doctor status = pendings
 const getAllDoctorBinding = (req, res) => {
   userModel
     .find({ role: process.env.DOCTOR_ROLE, status: process.env.PENDING_STATUS })
@@ -127,6 +129,7 @@ const getAllDoctorBinding = (req, res) => {
     });
 };
 
+// get all doctor status = rejected
 const rejectedStatusUpdate = (req, res) => {
     const { id } = req.params;
 
@@ -153,6 +156,8 @@ const rejectedStatusUpdate = (req, res) => {
       });
 }
 
+
+// Update Status from "bendings" to "accepted"
 const acceptedStatusUpdate = (req, res) => {
     const { id } = req.params;
 
@@ -179,6 +184,7 @@ const acceptedStatusUpdate = (req, res) => {
       });
 }
 
+// add patient from doctor
 const addPatient = async (req, res) => {
   const {fileNumber, fullName, diabetesType,age} = req.body
   const savedFullName = fullName.toLowerCase();
@@ -211,7 +217,8 @@ const addPatient = async (req, res) => {
 }
 };
 
-   
+
+// copmpelete patient register from patient (email+password)
 const compeleteRegister = async (req, res) => {
   const { fileNumber, password, email } = req.body;
   const salt = Number(process.env.SALT);
@@ -240,4 +247,54 @@ const compeleteRegister = async (req, res) => {
 })
 }
 
-module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister };
+// get one patient is vervified
+const getPatientById = async (req, res) => {
+  const { id } = req.params;
+
+  userModel
+  .findOne({ _id: id, role: process.env.PATIENT_ROLE, status: process.env.VERIFIED_STATUS})
+  .then((result) => {
+    if(result) 
+        res.status(200).json(result)
+      else res.status(404).json({ message: "this patien is not verified yet!!"});
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+// edit patient profile
+const editPatientProfile = async (req, res) => {
+  const { avatar, fullName, internationalId, password, email, phoneNumber, age} = req.body
+  const salt = Number(process.env.SALT);
+  const savedPassword = await bcrypt.hash(password, salt);
+  
+  userModel
+  .findOneAndUpdate(
+      {
+          _id: req.token.id, status: process.env.VERIFIED_STATUS
+      },
+      {
+        avatar,
+        fullName: fullName,
+        internationalId,
+        password: savedPassword,
+        email: email,
+        phoneNumber,
+        age,
+      }, {new: true}
+  )
+  .then((result) => {
+      if(result) {
+          res.status(200).json(result);
+      } else {
+          res.status(404).json({ message: `There is no patient with this ID: (${req.token.id}) or don't verified yet!!`});
+      }
+  })
+  .catch((err) => {
+      res.status(400).json(err);
+    });
+}
+
+
+module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile};

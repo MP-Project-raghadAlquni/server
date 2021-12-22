@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   email: { type: String, unique: true},
   role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
-  phoneNumber: { type: Boolean, defalt: false },
+  phoneNumber: { type: String },
   age: { type: Number },
   doctor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   patients: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
