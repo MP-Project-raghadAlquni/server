@@ -64,8 +64,8 @@ const doctorlogin = (req, res) => {
               "The required information is incomplete, you must complete it"
             );
         } else if (
-          result.email == email &&
-          result.status.status == "accepted" || result.status.status == "verified"
+          (result.email == email && result.status.status == "accepted") ||
+          result.status.status == "verified"
         ) {
           const hashedPass = await bcrypt.compare(password, result.password);
           const payload = {
@@ -100,7 +100,10 @@ const doctorlogin = (req, res) => {
 // get all doctor
 const getAllDoctor = (req, res) => {
   userModel
-    .find({ role: process.env.DOCTOR_ROLE , status: process.env.ACCEPTED_STATUS })
+    .find({
+      role: process.env.DOCTOR_ROLE,
+      status: process.env.ACCEPTED_STATUS,
+    })
     .then((result) => {
       if (result) {
         console.log(result);
@@ -131,67 +134,66 @@ const getAllDoctorBinding = (req, res) => {
 
 // get all doctor status = rejected
 const rejectedStatusUpdate = (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    userModel
+  userModel
     .findOneAndUpdate(
-        {
-            status: process.env.PENDING_STATUS,
-            _id: id,
-        },
-        {
-            status: process.env.REJECTED_STATUS
-        
-        }, {new: true}
+      {
+        status: process.env.PENDING_STATUS,
+        _id: id,
+      },
+      {
+        status: process.env.REJECTED_STATUS,
+      },
+      { new: true }
     )
     .then((result) => {
-        if(result) {
-            res.status(200).json(result);
-        } else {
-            res.status(404).json("This user is accepted or deleted");
-        }
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json("This user is accepted or deleted");
+      }
     })
     .catch((err) => {
-        res.status(400).json(err);
-      });
-}
-
+      res.status(400).json(err);
+    });
+};
 
 // Update Status from "bendings" to "accepted"
 const acceptedStatusUpdate = (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    userModel
+  userModel
     .findOneAndUpdate(
-        {
-            status: process.env.PENDING_STATUS,
-            _id: id,
-        },
-        {
-            status: process.env.ACCEPTED_STATUS,
-        
-        }, {new: true}
+      {
+        status: process.env.PENDING_STATUS,
+        _id: id,
+      },
+      {
+        status: process.env.ACCEPTED_STATUS,
+      },
+      { new: true }
     )
     .then((result) => {
-        if(result) {
-            res.status(200).json(result);
-        } else {
-            res.status(404).json("This user is rejected or deleted");
-        }
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res.status(404).json("This user is rejected or deleted");
+      }
     })
     .catch((err) => {
-        res.status(400).json(err);
-      });
-}
+      res.status(400).json(err);
+    });
+};
 
 // add patient from doctor
 const addPatient = async (req, res) => {
-  const {fileNumber, fullName, diabetesType,age} = req.body
+  const { fileNumber, fullName, diabetesType, age } = req.body;
   const savedFullName = fullName.toLowerCase();
 
   const found = await userModel.findOne({ fileNumber: fileNumber });
 
-  if(!found) {
+  if (!found) {
     const newPatient = new userModel({
       fileNumber,
       fullName: savedFullName,
@@ -200,23 +202,22 @@ const addPatient = async (req, res) => {
       role: "61c087a43bd70fbf7ad59b54",
       status: process.env.NOT_VERIFIED_STATUS,
       doctor: req.token.id,
-    })
+    });
 
     newPatient
-    .save()
-    .then((result) => {
-      res.status(201).json(result);
-    })
-    .catch((err) => {
-      res.status(400).json(err);
+      .save()
+      .then((result) => {
+        res.status(201).json(result);
+      })
+      .catch((err) => {
+        res.status(400).json(err);
+      });
+  } else {
+    res.json({
+      message: "Patient with this File Number was registered.",
     });
-} else {
-  res.json({
-    message: "Patient with this File Number was registered.",
-  });
-}
+  }
 };
-
 
 // copmpelete patient register from patient (email+password)
 const compeleteRegister = async (req, res) => {
@@ -225,38 +226,44 @@ const compeleteRegister = async (req, res) => {
   const savedPassword = await bcrypt.hash(password, salt);
 
   userModel
-  .findOneAndUpdate({ fileNumber: fileNumber, status: process.env.NOT_VERIFIED_STATUS,
-  },
-  {
-    status: process.env.VERIFIED_STATUS,
-    password: savedPassword,
-    email: email,
-
-  }, {new: true}
-  )
-  .then((result) => {
-    if (result) {
-      res.status(200).json(result);
-      console.log(result);
-    } else {
-        res.status(400).json("your account is already verified ,you can Login now");
+    .findOneAndUpdate(
+      { fileNumber: fileNumber, status: process.env.NOT_VERIFIED_STATUS },
+      {
+        status: process.env.VERIFIED_STATUS,
+        password: savedPassword,
+        email: email,
+      },
+      { new: true }
+    )
+    .then((result) => {
+      if (result) {
+        res.status(200).json(result);
+        console.log(result);
+      } else {
+        res
+          .status(400)
+          .json("your account is already verified ,you can Login now");
       }
     })
     .catch((err) => {
       res.status(400).json(err);
-})
-}
+    });
+};
 
 // get one patient is vervified
 const getPatientById = async (req, res) => {
   const { id } = req.params;
 
   userModel
-  .findOne({ _id: id, role: process.env.PATIENT_ROLE, status: process.env.VERIFIED_STATUS})
-  .then((result) => {
-    if(result) 
-        res.status(200).json(result)
-      else res.status(404).json({ message: "this patien is not verified yet!!"});
+    .findOne({
+      _id: id,
+      role: process.env.PATIENT_ROLE,
+      status: process.env.VERIFIED_STATUS,
+    })
+    .then((result) => {
+      if (result) res.status(200).json(result);
+      else
+        res.status(404).json({ message: "this patien is not verified yet!!" });
     })
     .catch((err) => {
       res.status(400).json(err);
@@ -265,14 +272,23 @@ const getPatientById = async (req, res) => {
 
 // edit patient profile
 const editPatientProfile = async (req, res) => {
-  const { avatar, fullName, internationalId, password, email, phoneNumber, age} = req.body
+  const {
+    avatar,
+    fullName,
+    internationalId,
+    password,
+    email,
+    phoneNumber,
+    age,
+  } = req.body;
   const salt = Number(process.env.SALT);
   const savedPassword = await bcrypt.hash(password, salt);
-  
+
   userModel
-  .findOneAndUpdate(
+    .findOneAndUpdate(
       {
-          _id: req.token.id, status: process.env.VERIFIED_STATUS
+        _id: req.token.id,
+        status: process.env.VERIFIED_STATUS,
       },
       {
         avatar,
@@ -282,30 +298,38 @@ const editPatientProfile = async (req, res) => {
         email: email,
         phoneNumber,
         age,
-      }, {new: true}
-  )
-  .then((result) => {
-      if(result) {
-          res.status(200).json(result);
+      },
+      { new: true }
+    )
+    .then((result) => {
+      if (result) {
+        res.status(200).json(result);
       } else {
-          res.status(404).json({ message: `There is no patient with this ID: (${req.token.id}) or don't verified yet!!`});
+        res
+          .status(404)
+          .json({
+            message: `There is no patient with this ID: (${req.token.id}) or don't verified yet!!`,
+          });
       }
-  })
-  .catch((err) => {
+    })
+    .catch((err) => {
       res.status(400).json(err);
     });
-}
+};
 
 // GET ALL VERIFIED PATIENTS
 const getAllVerfiedPtients = (req, res) => {
   userModel
-    .find({ role: process.env.PATIENT_ROLE, status: process.env.VERIFIED_STATUS })
+    .find({
+      role: process.env.PATIENT_ROLE,
+      status: process.env.VERIFIED_STATUS,
+    })
     .then((result) => {
       if (result) {
         console.log(result);
         res.status(200).json(result);
       } else {
-        res.status(404).json({ message: "There is no patients yet!!"});
+        res.status(404).json({ message: "There is no patients yet!!" });
       }
     })
     .catch((err) => {
@@ -317,24 +341,90 @@ const getAllVerfiedPtients = (req, res) => {
 const getAllPatientDoctor = (req, res) => {
   const { doctorId } = req.params;
   userModel
-    .find({ doctor: doctorId, status: process.env.VERIFIED_STATUS, role: process.env.PATIENT_ROLE })
+    .find({
+      doctor: doctorId,
+      status: process.env.VERIFIED_STATUS,
+      role: process.env.PATIENT_ROLE,
+    })
     .then((result) => {
       console.log(result);
       if (result.length > 0) {
-
         console.log(result);
         res.status(200).json(result);
       } else {
         console.log("here");
-        res.status(404).json({ message: `There is no patients with doctor has ID (${doctorId}) yet!!`});
+        res
+          .status(404)
+          .json({
+            message: `There is no patients with doctor has ID (${doctorId}) yet!!`,
+          });
       }
     })
     .catch((err) => {
       console.log(err);
       res.status(400).json(err);
     });
-}
+};
 
+const editDoctorProfile = async (req, res) => {
+  const { doctorId } = req.params;
+  const {
+    avatar,
+    fullName,
+    internationalId,
+    password,
+    email,
+    phoneNumber,
+    age,
+  } = req.body;
+  const salt = Number(process.env.SALT);
+  const savedPassword = await bcrypt.hash(password, salt);
 
+  userModel
+    .findOneAndUpdate(
+      {
+        id: doctorId,
+        status: process.env.ACCEPTED_STATUS,
+      },
+      {
+        avatar,
+        fullName: fullName,
+        internationalId,
+        password: savedPassword,
+        email: email,
+        phoneNumber,
+        age,
+      },
+      { new: true }
+    )
+    .then((result) => {
+      if (result) {
+        res.status(200).json(result);
+      } else {
+        res
+          .status(404)
+          .json({
+            message: `There is no Doctor with this ID: (${req.token.id}) or don't accepeted yet!!`,
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
 
-module.exports = { signUp, doctorlogin, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile, getAllVerfiedPtients, getAllPatientDoctor};
+module.exports = {
+  signUp,
+  doctorlogin,
+  getAllDoctor,
+  getAllDoctorBinding,
+  rejectedStatusUpdate,
+  acceptedStatusUpdate,
+  addPatient,
+  compeleteRegister,
+  getPatientById,
+  editPatientProfile,
+  getAllVerfiedPtients,
+  getAllPatientDoctor,
+  editDoctorProfile,
+};
