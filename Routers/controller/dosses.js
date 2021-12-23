@@ -33,7 +33,45 @@ const newDosses = async (req, res) => {
   }
 };
 
+// edit patient dosses by Doctor
+const editDosses = async (req, res) => {
+    const { forUser } = req.params;
+  const {
+    insulineType1,
+    insulineType2
+  } = req.body;
+ 
+  dossesModel
+  .findOneAndUpdate(
+    {
+      forUser: forUser,
+      byDoctor: req.token.id
+    },
+    {
+        insulineType1,
+        insulineType2,
+    },
+    { new: true })
+    .then((result) => {
+        if(result) {
+            res.status(200).json(result);
+      } else {
+        res
+          .status(404)
+          .json({
+            message: `There is no patient with this ID: (${forUser}) or you can't edit it!!`,
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+    
+// get dosses for fpr patient
+
 
 module.exports = {
-    newDosses
+    newDosses,
+    editDosses,
 }
