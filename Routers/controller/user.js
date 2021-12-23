@@ -132,7 +132,7 @@ const getAllDoctorBinding = (req, res) => {
     });
 };
 
-// get all doctor status = rejected
+// put all doctor status = PENDING to REJECTED
 const rejectedStatusUpdate = (req, res) => {
   const { id } = req.params;
 
