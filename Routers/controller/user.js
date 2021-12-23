@@ -64,6 +64,15 @@ const login = (req, res) => {
               "The required information is incomplete, you must complete it"
             );
         } else if (
+          result.email == email &&
+          result.status.status == "deleted"
+        ) {
+          res
+            .status(400)
+            .json(
+              "This account is Deleted"
+            );
+        } else if (
           (result.email == email && result.status.status == "accepted") ||
           result.status.status == "verified"
         ) {
@@ -132,7 +141,7 @@ const getAllDoctorBinding = (req, res) => {
     });
 };
 
-// get all doctor status = rejected
+// put all doctor status = PENDING to REJECTED
 const rejectedStatusUpdate = (req, res) => {
   const { id } = req.params;
 
