@@ -10,7 +10,6 @@ const { day, date, hours, clinic } = req.body;
     day: day,
     date: date,
     clinic: clinic,
-    forUser: process.env.NOT_VERIFIED_STATUS,
   })
   if (!found) {
     const newAppointment = new appointmentModel({
@@ -32,7 +31,7 @@ const { day, date, hours, clinic } = req.body;
       });
   } else {
     res.json({
-      message: "This This time is already reserved",
+      message: "This time is already reserved",
     });
   }
 };
@@ -42,8 +41,7 @@ const { day, date, hours, clinic } = req.body;
 const getAppointments = async (req, res) => {
     const { patientId } = req.params;
 appointmentModel
-    .findOne({ _id: patientId })
-    .populate("forUser")
+    .findOne({ forUser: patientId })
     .then((result) => {
         if(result) {
             res.status(200).json(result);
@@ -55,8 +53,47 @@ appointmentModel
                 });
           }
     })
-    
+    .catch((err) => {
+        res.status(400).json(err);
+      });
 }
 
 
-module.exports = { newAppointment, getAppointments };
+// get all Appointment for one patient (isDone = true)
+const getDoneAppointments = async (req, res) => {
+    const { patientId } = req.params;
+appointmentModel
+    .findOne({ forUser: patientId, isDone: true })
+    .then((result) => {
+        if(result) {
+            res.status(200).json(result);
+          } else {
+            res
+                .status(404)
+                .json({
+                  message: `Patient with ID ${patientId} dosn't have any appointments is Done!! `,
+                });
+          }
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+      });
+}
+
+
+// get all Appointment for one patient (isDone = true)
+const getOneAppointment = async (req, res) => {
+    const { patientId , appointmentId} = req.params;
+appointmentModel
+    .findOne({ forUser: patientId, _id: appointmentId})
+    .then((result) => {
+        if(result) {
+            res.status(200).json(result);
+          }
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+      });
+}
+
+module.exports = { newAppointment, getAppointments, getDoneAppointments, getOneAppointment };
