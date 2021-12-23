@@ -69,9 +69,27 @@ const editDosses = async (req, res) => {
 };
     
 // get dosses for fpr patient
-
+const getAllDossesForUser = async (req, res) => {
+    dossesModel
+        .findOne({ forUser: req.token.id })
+        .then((result) => {
+            if(result) {
+                res.status(200).json(result);
+              } else {
+                res
+                    .status(404)
+                    .json({
+                      message: `There is no patient with this ID: (${req.token.id})`,
+                    });
+              }
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+          });
+    }
 
 module.exports = {
     newDosses,
     editDosses,
+    getAllDossesForUser,
 }
