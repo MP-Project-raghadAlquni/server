@@ -43,7 +43,7 @@ const signUp = async (req, res) => {
 };
 
 // LOGIN (for doctors & patients & admin)
-const doctorlogin = (req, res) => {
+const login = (req, res) => {
   const { password, email } = req.body;
 
   userModel
@@ -459,7 +459,7 @@ const getAllUserForAdmin = (req, res) => {
 
 module.exports = {
   signUp,
-  doctorlogin,
+  login,
   getAllDoctor,
   getAllDoctorBinding,
   rejectedStatusUpdate,
