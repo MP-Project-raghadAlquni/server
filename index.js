@@ -22,6 +22,10 @@ app.use(appointmentRouter);
 const dossesRouter = require("./Routers/routes/dosses");
 app.use(dossesRouter);
 
+const readingsRouter = require("./Routers/routes/readings");
+app.use(readingsRouter);
+
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`server run on ${PORT}`);
