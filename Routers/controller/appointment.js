@@ -1,4 +1,6 @@
 const appointmentModel = require("./../../db/models/appointmentSchema");
+const userModel = require("./../../db/models/userSchema")
+
 
 
 // add new appointment for patient by doctor
@@ -39,9 +41,8 @@ const { day, date, hours, clinic } = req.body;
 
 // get all Appointment for one patient (done or not)
 const getAppointments = async (req, res) => {
-    const { patientId } = req.params;
 appointmentModel
-    .findOne({ forUser: patientId })
+    .find({ forUser: req.token.id })
     .then((result) => {
         if(result) {
             res.status(200).json(result);
@@ -49,7 +50,7 @@ appointmentModel
             res
                 .status(404)
                 .json({
-                  message: `Patient with ID ${patientId} dosn't have any appointments!!`,
+                  message: `Patient with ID ${forUser} dosn't have any appointments!!`,
                 });
           }
     })
@@ -61,9 +62,8 @@ appointmentModel
 
 // get all Appointment for one patient (isDone = true)
 const getDoneAppointments = async (req, res) => {
-    const { patientId } = req.params;
 appointmentModel
-    .findOne({ forUser: patientId, isDone: true })
+    .findOne({ forUser: req.token.id, isDone: true })
     .then((result) => {
         if(result) {
             res.status(200).json(result);
@@ -83,9 +83,9 @@ appointmentModel
 
 // get all Appointment for one patient (isDone = true)
 const getOneAppointment = async (req, res) => {
-    const { patientId , appointmentId} = req.params;
+    const { appointmentId} = req.params;
 appointmentModel
-    .findOne({ forUser: patientId, _id: appointmentId})
+    .findOne({ forUser: req.token.id, _id: appointmentId})
     .then((result) => {
         if(result) {
             res.status(200).json(result);

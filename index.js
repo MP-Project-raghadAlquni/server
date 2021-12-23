@@ -19,6 +19,9 @@ app.use(statusRouter);
 const appointmentRouter = require("./Routers/routes/appointment");
 app.use(appointmentRouter);
 
+const dossesRouter = require("./Routers/routes/dosses");
+app.use(dossesRouter);
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`server run on ${PORT}`);
