@@ -33,7 +33,86 @@ const newDosses = async (req, res) => {
   }
 };
 
+// edit patient dosses by Doctor
+const editDosses = async (req, res) => {
+    const { forUser } = req.params;
+  const {
+    insulineType1,
+    insulineType2
+  } = req.body;
+ 
+  dossesModel
+  .findOneAndUpdate(
+    {
+      forUser: forUser,
+      byDoctor: req.token.id
+    },
+    {
+        insulineType1,
+        insulineType2,
+    },
+    { new: true })
+    .then((result) => {
+        if(result) {
+            res.status(200).json(result);
+      } else {
+        res
+          .status(404)
+          .json({
+            message: `There is no patient with this ID: (${forUser}) or you can't edit it!!`,
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+    
+// get dosses for patient
+const getAllDossesForUser = async (req, res) => {
+    dossesModel
+        .findOne({ forUser: req.token.id })
+        .then((result) => {
+            if(result) {
+                res.status(200).json(result);
+              } else {
+                res
+                    .status(404)
+                    .json({
+                      message: `There is no patient with this ID: (${req.token.id})`,
+                    });
+              }
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+          });
+    }
+
+// get dosses of patient for doctor
+const getAllDossesForDoctor = async (req, res) => {
+    const { forUser } = req.params;
+    dossesModel
+        .findOne({ byDoctor: req.token.id,  forUser: forUser})
+        .then((result) => {
+            if(result) {
+                res.status(200).json(result);
+              } else {
+                res
+                    .status(404)
+                    .json({
+                      message: `There is no patient with this ID: (${req.token.id})`,
+                    });
+              }
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+          });
+    }
+
 
 module.exports = {
-    newDosses
+    newDosses,
+    editDosses,
+    getAllDossesForUser,
+    getAllDossesForDoctor,
 }
