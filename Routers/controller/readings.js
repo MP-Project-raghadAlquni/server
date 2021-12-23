@@ -53,7 +53,7 @@ const allReadingsFalse = async (req, res) => {
 }
 
 // get all readings isRead = true
-const allReadingsTrue= async (req, res) => {
+const allReadingsTrue = async (req, res) => {
     readingsModel
     .find({ isRead: true, isDel: false, byUser: req.token.id })
     .then((result) => {
@@ -72,14 +72,14 @@ const allReadingsTrue= async (req, res) => {
 // edit Readings by id (for User only)
 const editReadings = async (req, res) => {
   const {
-    beforeBreakfast, afterBreakfast, beforeLunch, afterLunch, beforeDinner, afterDinner, beforeSleep, date,id
+    beforeBreakfast, afterBreakfast, beforeLunch, afterLunch, beforeDinner, afterDinner, beforeSleep, date
   } = req.body;
  console.log(req.token.id,"id");
   readingsModel
   .findOneAndUpdate(
     {
-    //   byUser: req.token.id,
-    _id :id,
+      byUser: req.token.id,
+      date: date,
       isRead: false, 
     },
     {
