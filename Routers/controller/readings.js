@@ -3,8 +3,8 @@ const readingsModel = require("./../../db/models/readingsSchema");
 // add new Readings by user
 const addReadings = async (req, res) => {
         const { beforeBreakfast, afterBreakfast, beforeLunch, afterLunch, beforeDinner, afterDinner, beforeSleep, date } = req.body;
-          const found = await readingsModel.findOne({
-            date: date && beforeBreakfast, afterBreakfast, beforeLunch, afterLunch, beforeDinner, afterDinner, beforeSleep })
+        console.log(date,"date");
+          const found = await readingsModel.findOne({ date: date })
           
             if (!found) {
             const newReadings = new readingsModel({
@@ -69,9 +69,44 @@ const allReadingsTrue= async (req, res) => {
     });
 }
 
+// edit Readings by id (for User only)
+const editReadings = async (req, res) => {
+  const {
+    beforeBreakfast, afterBreakfast, beforeLunch, afterLunch, beforeDinner, afterDinner, beforeSleep, date,id
+  } = req.body;
+ console.log(req.token.id,"id");
+  readingsModel
+  .findOneAndUpdate(
+    {
+    //   byUser: req.token.id,
+    _id :id,
+      isRead: false, 
+    },
+    {
+        beforeBreakfast, afterBreakfast, beforeLunch, afterLunch, beforeDinner, afterDinner, beforeSleep, date
+    },
+    { new: true })
+    .then((result) => {
+        console.log(result,"result");
+        if(result) {
+            res.status(200).json(result);
+      } else {
+        res
+          .status(404)
+          .json({
+            message: `There readings you can't edit it or its already deleted!!`,
+          });
+      }
+    })
+    .catch((err) => {
+        console.log(err);
+      res.status(400).json(err);
+    });
+};
 
 module.exports = {
             addReadings,
             allReadingsFalse,
             allReadingsTrue,
+            editReadings,
           };

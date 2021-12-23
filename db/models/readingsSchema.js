@@ -12,7 +12,7 @@ const readingsSchema = new mongoose.Schema({
         isDel: { type : Boolean, default: false },
         isRead: { type : Boolean, default: false },
         byUser: { type : mongoose.Schema.Types.ObjectId, ref: "User" },
-        Date: { type : Date, default: Date.now },
+        date: { type: Date, required: true },
 });
 
 module.exports = mongoose.model("Readings", readingsSchema);
