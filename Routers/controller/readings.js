@@ -140,10 +140,43 @@ else {
 }
 
 
+// all readings T for doctor
+const allReadingTrueDoctor = async (req, res) => {
+    const { user } = req.params
+
+    const found = await userModel.findOne({ 
+        _id : req.token.id ,
+        role: process.env.DOCTOR_ROLE,
+        status: process.env.ACCEPTED_STATUS })
+
+        if(found) {
+    readingsModel
+    .find({ isRead: true, isDel: false, byUser: user })
+    .then((result) => {
+      if (result.length > 0) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(400).json("all readings is not read!!");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+}
+else {
+    res.json({
+      message: "You do not have permission for this requset ",
+    });
+  }
+}
+
+
 module.exports = {
             addReadings,
             allReadingsFalse,
             allReadingsTrue,
             editReadings,
-            allReadingsFalseDoctor
+            allReadingsFalseDoctor,
+            allReadingTrueDoctor,
 };
