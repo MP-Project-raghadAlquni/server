@@ -1,4 +1,6 @@
 const readingsModel = require("./../../db/models/readingsSchema");
+const userModel = require("./../../db/models/userSchema");
+
 
 // add new Readings by user
 const addReadings = async (req, res) => {
@@ -69,6 +71,7 @@ const allReadingsTrue = async (req, res) => {
     });
 }
 
+
 // edit Readings by id (for User only)
 const editReadings = async (req, res) => {
   const {
@@ -101,12 +104,46 @@ const editReadings = async (req, res) => {
     .catch((err) => {
         console.log(err);
       res.status(400).json(err);
-    });
+    }) 
 };
+
+
+// all readings F for doctor
+const allReadingsFalseDoctor = async (req, res) => {
+    const { user } = req.params
+
+    const found = await userModel.findOne({ 
+        _id : req.token.id ,
+        role: process.env.DOCTOR_ROLE,
+        status: process.env.ACCEPTED_STATUS })
+
+        if(found) {
+    readingsModel
+    .find({ isRead: false, isDel: false, byUser: user })
+    .then((result) => {
+      if (result.length > 0) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(400).json("all readings is read!!");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+}
+else {
+    res.json({
+      message: "You do not have permission for this requset ",
+    });
+  }
+}
+
 
 module.exports = {
             addReadings,
             allReadingsFalse,
             allReadingsTrue,
             editReadings,
-          };
+            allReadingsFalseDoctor
+};
