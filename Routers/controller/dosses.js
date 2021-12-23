@@ -68,7 +68,7 @@ const editDosses = async (req, res) => {
     });
 };
     
-// get dosses for fpr patient
+// get dosses for patient
 const getAllDossesForUser = async (req, res) => {
     dossesModel
         .findOne({ forUser: req.token.id })
@@ -88,8 +88,31 @@ const getAllDossesForUser = async (req, res) => {
           });
     }
 
+// get dosses of patient for doctor
+const getAllDossesForDoctor = async (req, res) => {
+    const { forUser } = req.params;
+    dossesModel
+        .findOne({ byDoctor: req.token.id,  forUser: forUser})
+        .then((result) => {
+            if(result) {
+                res.status(200).json(result);
+              } else {
+                res
+                    .status(404)
+                    .json({
+                      message: `There is no patient with this ID: (${req.token.id})`,
+                    });
+              }
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+          });
+    }
+
+
 module.exports = {
     newDosses,
     editDosses,
     getAllDossesForUser,
+    getAllDossesForDoctor,
 }
