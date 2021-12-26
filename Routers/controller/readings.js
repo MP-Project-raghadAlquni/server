@@ -1,6 +1,7 @@
 const readingsModel = require("./../../db/models/readingsSchema");
 const userModel = require("./../../db/models/userSchema");
 
+
 // add new Readings by user
 const addReadings = async (req, res) => {
   const {
@@ -43,6 +44,7 @@ const addReadings = async (req, res) => {
     });
   }
 };
+
 
 // get all readings isRead = false
 const allReadingsFalse = async (req, res) => {
@@ -222,6 +224,76 @@ const editReadingsStatus = async (req, res) => {
   }
 };
 
+
+// const alluserWithNewReadings = async (req, res) => {
+
+//   const found = await userModel.findOne({
+//     _id: req.token.id,
+//     role: process.env.DOCTOR_ROLE,
+//     status: process.env.ACCEPTED_STATUS,
+//   });
+
+//   if (found) {
+//     readingsModel
+//       .find({ isRead: false, isDel: false})
+//       .then((result) => {
+//         if (result.length > 0) {
+//           console.log(result);
+//           res.status(200).json(result);
+//         } else {
+//           res.status(400).json("all readings is not read!!");
+//         }
+//       })
+//       .catch((err) => {
+//         res.status(400).json(err);
+//       });
+//   } else {
+//     res.json({
+//       message: "You do not have permission for this requset ",
+//     });
+//   }
+// };
+
+
+const alluserWithNewReadings = async (req, res) => {
+
+
+const found = await readingsModel.find({toDoctor: req.token.id, isRead:false}).populate("byUser").then((result)=>{
+  res.status(200).json(result)
+}).catch((err)=>{
+  console.log(err);
+  res.json(err)
+})
+  
+
+
+  // const found = await userModel.findOne({
+  //   _id: req.token.id,
+  //   role: process.env.DOCTOR_ROLE,
+  //   status: process.env.ACCEPTED_STATUS,
+  // });
+
+  // if (found) {
+  //   readingsModel
+  //     .find({ isRead: false, isDel: false})
+  //     .then((result) => {
+  //       if (result.length > 0) {
+  //         console.log(result);
+  //         res.status(200).json(result);
+  //       } else {
+  //         res.status(400).json("all readings is not read!!");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       res.status(400).json(err);
+  //     });
+  // } else {
+  //   res.json({
+  //     message: "You do not have permission for this requset ",
+  //   });
+  // }
+};
+
 module.exports = {
   addReadings,
   allReadingsFalse,
@@ -230,4 +302,5 @@ module.exports = {
   allReadingsFalseDoctor,
   allReadingTrueDoctor,
   editReadingsStatus,
+  alluserWithNewReadings
 };

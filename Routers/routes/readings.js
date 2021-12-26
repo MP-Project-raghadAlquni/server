@@ -1,5 +1,5 @@
 const express = require("express");
-const { addReadings, allReadingsFalse, allReadingsTrue, editReadings, allReadingsFalseDoctor, allReadingTrueDoctor, editReadingsStatus} = require("./../controller/readings");
+const { addReadings, allReadingsFalse, allReadingsTrue, editReadings, allReadingsFalseDoctor, allReadingTrueDoctor, editReadingsStatus, alluserWithNewReadings} = require("./../controller/readings");
 const readingsRouter = express.Router();
 
 const authentication = require("../middleware/authentication");
@@ -13,6 +13,7 @@ readingsRouter.put("/editReadings", authentication, editReadings);
 
 // for Doctor
 readingsRouter.get("/falseReadings/:user", authentication, allReadingsFalseDoctor);
+readingsRouter.get("/newReadings", authentication, alluserWithNewReadings);
 readingsRouter.get("/trueReadings/:user", authentication, allReadingTrueDoctor);
 readingsRouter.put("/editReadingsStatus/:user", authentication, editReadingsStatus);
 
