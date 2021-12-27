@@ -43,6 +43,7 @@ const { day, date, hours, clinic } = req.body;
 const getAppointments = async (req, res) => {
 appointmentModel
     .find({ forUser: req.token.id })
+    .populate("byDoctor")
     .then((result) => {
         if(result) {
             res.status(200).json(result);
@@ -58,6 +59,25 @@ appointmentModel
         res.status(400).json(err);
       });
 }
+
+const getAppointmentsForDoctors = async (req, res) => {
+  appointmentModel
+      .find({ byDoctor: req.token.id })
+      .then((result) => {
+          if(result) {
+              res.status(200).json(result);
+            } else {
+              res
+                  .status(404)
+                  .json({
+                    message: `Patient with ID ${byDoctor} dosn't have any appointments!!`,
+                  });
+            }
+      })
+      .catch((err) => {
+          res.status(400).json(err);
+        });
+  }
 
 
 // get all Appointment for one patient (isDone = true)
@@ -96,4 +116,4 @@ appointmentModel
       });
 }
 
-module.exports = { newAppointment, getAppointments, getDoneAppointments, getOneAppointment };
+module.exports = { newAppointment, getAppointments, getDoneAppointments, getOneAppointment, getAppointmentsForDoctors};
