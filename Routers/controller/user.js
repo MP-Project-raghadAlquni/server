@@ -197,10 +197,10 @@ const acceptedStatusUpdate = (req, res) => {
 
 // add patient from doctor
 const addPatient = async (req, res) => {
-  const { fileNumber, fullName, diabetesType, age } = req.body;
+  const { fileNumber, fullName, diabetesType, age, gender } = req.body;
   const savedFullName = fullName.toLowerCase();
 
-  const found = await userModel.findOne({ fileNumber: fileNumber });
+  const found = await userModel.findOne({ fileNumber: fileNumber })
 
   if (!found) {
     const newPatient = new userModel({
@@ -211,11 +211,23 @@ const addPatient = async (req, res) => {
       role: "61c087a43bd70fbf7ad59b54",
       status: process.env.NOT_VERIFIED_STATUS,
       doctor: req.token.id,
+      gender,
     });
-
     newPatient
       .save()
-      .then((result) => {
+      .then(async (result) => {
+        if (result) {
+          console.log(result);
+          await userModel.findByIdAndUpdate({
+            _id: req.token.id,
+          },
+          {
+            $push: { patients: result._id
+          }
+        },
+          { new: true}
+          )
+        }
         res.status(201).json(result);
       })
       .catch((err) => {
@@ -326,13 +338,15 @@ const editPatientProfile = async (req, res) => {
     });
 };
 
-// GET ALL VERIFIED PATIENTS
-const getAllVerfiedPtients = (req, res) => {
+// GET ALL VERIFIED PATIENTS for one Doctor
+const getAllVerfiedPatients = (req, res) => {
   userModel
     .find({
       role: process.env.PATIENT_ROLE,
       status: process.env.VERIFIED_STATUS,
+      doctor: req.token.id
     })
+    .populate("doctor")
     .then((result) => {
       if (result) {
         console.log(result);
@@ -346,15 +360,18 @@ const getAllVerfiedPtients = (req, res) => {
     });
 };
 
+
+
+
 // get all patient for one doctor
 const getAllPatientDoctor = (req, res) => {
-  const { doctorId } = req.params;
   userModel
     .find({
-      doctor: doctorId,
+      doctor: req.token.id,
       status: process.env.VERIFIED_STATUS,
       role: process.env.PATIENT_ROLE,
     })
+    .populate("doctor")
     .then((result) => {
       console.log(result);
       if (result.length > 0) {
@@ -477,7 +494,7 @@ module.exports = {
   compeleteRegister,
   getPatientById,
   editPatientProfile,
-  getAllVerfiedPtients,
+  getAllVerfiedPatients,
   getAllPatientDoctor,
   editDoctorProfile,
   spamUserFromAdmin,

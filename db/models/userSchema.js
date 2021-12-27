@@ -20,7 +20,9 @@ const userSchema = new mongoose.Schema({
   status: { type: mongoose.Schema.Types.ObjectId, ref: "Status" },
   certificates: { type: Array },
   letter: { type: String },
-  license: { type: String}
+  license: { type: String},
+  gender: { type: String, require: true },
+
 });
 
 module.exports = mongoose.model("User", userSchema);

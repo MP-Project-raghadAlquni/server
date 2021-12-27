@@ -136,7 +136,7 @@ const allReadingsFalseDoctor = async (req, res) => {
     _id: req.token.id,
     role: process.env.DOCTOR_ROLE,
     status: process.env.ACCEPTED_STATUS,
-  });
+  }).populate("byUser")
 
   if (found) {
     readingsModel
@@ -260,6 +260,7 @@ const alluserWithNewReadings = async (req, res) => {
 
 const found = await readingsModel.find({toDoctor: req.token.id, isRead:false}).populate("byUser").then((result)=>{
   res.status(200).json(result)
+
 }).catch((err)=>{
   console.log(err);
   res.json(err)
