@@ -4,8 +4,8 @@ const userSchema = new mongoose.Schema({
   fileNumber: { type: String, required: true, unique: true },
   avatar: {
     type: String,
-    defalt:
-      "https://cdn5.vectorstock.com/i/1000x1000/99/94/default-avatar-placeholder-profile-icon-male-vector-23889994.jpg",
+    default:
+      "https://www.rentorride.com/assets/photos/avatar.png",
   },
   fullName: { type: String, require: true },
   internationalId: { type: String, require: true },
