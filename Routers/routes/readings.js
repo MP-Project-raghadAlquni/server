@@ -9,7 +9,7 @@ const authorization = require("../middleware/authorization");
 readingsRouter.post("/addNewReadings", authentication, addReadings);
 readingsRouter.get("/falseReadings", authentication, allReadingsFalse);
 readingsRouter.get("/trueReadings", authentication, allReadingsTrue);
-readingsRouter.put("/editReadings", authentication, editReadings);
+readingsRouter.put("/editReadings/:readingId", authentication, editReadings);
 
 // for Doctor
 readingsRouter.get("/falseReadings/:user", authentication, allReadingsFalseDoctor);

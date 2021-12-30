@@ -12,7 +12,7 @@ const readingsSchema = new mongoose.Schema({
   isRead: { type: Boolean, default: false },
   byUser: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   toDoctor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  date: { type: Date, required: true },
+  date: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Readings", readingsSchema);

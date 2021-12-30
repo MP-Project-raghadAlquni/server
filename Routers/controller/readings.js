@@ -1,3 +1,4 @@
+const { type } = require("express/lib/response");
 const readingsModel = require("./../../db/models/readingsSchema");
 const userModel = require("./../../db/models/userSchema");
 
@@ -16,7 +17,7 @@ const addReadings = async (req, res) => {
   } = req.body;
   console.log(date, "date");
   const found = await readingsModel.findOne({ date: date });
-
+  console.log(date,found,"date");
   if (!found) {
     const newReadings = new readingsModel({
       beforeBreakfast,
@@ -82,6 +83,7 @@ const allReadingsTrue = async (req, res) => {
 
 // edit Readings by id (for User only)
 const editReadings = async (req, res) => {
+  const { readingId } = req.params
   const {
     beforeBreakfast,
     afterBreakfast,
@@ -90,14 +92,14 @@ const editReadings = async (req, res) => {
     beforeDinner,
     afterDinner,
     beforeSleep,
-    date,
   } = req.body;
-  console.log(req.token.id, "id");
+  console.log(beforeBreakfast,typeof beforeBreakfast,readingId,"here");
   readingsModel
+
     .findOneAndUpdate(
       {
         byUser: req.token.id,
-        date: date,
+        _id: readingId,
         isRead: false,
       },
       {
@@ -108,7 +110,6 @@ const editReadings = async (req, res) => {
         beforeDinner,
         afterDinner,
         beforeSleep,
-        date,
       },
       { new: true }
     )
@@ -225,38 +226,9 @@ const editReadingsStatus = async (req, res) => {
 };
 
 
-// const alluserWithNewReadings = async (req, res) => {
-
-//   const found = await userModel.findOne({
-//     _id: req.token.id,
-//     role: process.env.DOCTOR_ROLE,
-//     status: process.env.ACCEPTED_STATUS,
-//   });
-
-//   if (found) {
-//     readingsModel
-//       .find({ isRead: false, isDel: false})
-//       .then((result) => {
-//         if (result.length > 0) {
-//           console.log(result);
-//           res.status(200).json(result);
-//         } else {
-//           res.status(400).json("all readings is not read!!");
-//         }
-//       })
-//       .catch((err) => {
-//         res.status(400).json(err);
-//       });
-//   } else {
-//     res.json({
-//       message: "You do not have permission for this requset ",
-//     });
-//   }
-// };
 
 
 const alluserWithNewReadings = async (req, res) => {
-
 
 const found = await readingsModel.find({toDoctor: req.token.id, isRead:false}).populate("byUser").then((result)=>{
   res.status(200).json(result)
@@ -268,31 +240,6 @@ const found = await readingsModel.find({toDoctor: req.token.id, isRead:false}).p
   
 
 
-  // const found = await userModel.findOne({
-  //   _id: req.token.id,
-  //   role: process.env.DOCTOR_ROLE,
-  //   status: process.env.ACCEPTED_STATUS,
-  // });
-
-  // if (found) {
-  //   readingsModel
-  //     .find({ isRead: false, isDel: false})
-  //     .then((result) => {
-  //       if (result.length > 0) {
-  //         console.log(result);
-  //         res.status(200).json(result);
-  //       } else {
-  //         res.status(400).json("all readings is not read!!");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       res.status(400).json(err);
-  //     });
-  // } else {
-  //   res.json({
-  //     message: "You do not have permission for this requset ",
-  //   });
-  // }
 };
 
 module.exports = {
