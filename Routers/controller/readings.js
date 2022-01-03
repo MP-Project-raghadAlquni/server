@@ -1,25 +1,15 @@
-const { type } = require("express/lib/response");
 const readingsModel = require("./../../db/models/readingsSchema");
 const userModel = require("./../../db/models/userSchema");
 
-
 // add new Readings by user
 const addReadings = async (req, res) => {
-  const {
-    beforeBreakfast,
-    afterBreakfast,
-    beforeLunch,
-    afterLunch,
-    beforeDinner,
-    afterDinner,
-    beforeSleep,
-    date,
-  } = req.body;
-  console.log(date, "date");
-  const found = await readingsModel.findOne({ date: date });
-  console.log(date,found,"date");
-  if (!found) {
-    const newReadings = new readingsModel({
+  const user = await userModel
+    .findOne({
+      _id: req.token.id,
+    })
+    .populate("doctor");
+  if (user) {
+    const {
       beforeBreakfast,
       afterBreakfast,
       beforeLunch,
@@ -27,25 +17,41 @@ const addReadings = async (req, res) => {
       beforeDinner,
       afterDinner,
       beforeSleep,
-      byUser: req.token.id,
       date,
-    });
-    newReadings
-      .save()
-      .then((result) => {
-        res.status(201).json(result);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).json(err);
+    } = req.body;
+    console.log(date, "date");
+    const found = await readingsModel.findOne({ date: date });
+    console.log(date, found, "date");
+    if (!found) {
+      const newReadings = new readingsModel({
+        beforeBreakfast,
+        afterBreakfast,
+        beforeLunch,
+        afterLunch,
+        beforeDinner,
+        afterDinner,
+        beforeSleep,
+        byUser: req.token.id,
+        date,
+        toDoctor: user.doctor,
       });
+      newReadings
+        .save()
+        .then((result) => {
+          res.status(201).json(result);
+        })
+
+        .catch((err) => {
+          console.log(err);
+          res.status(400).json(err);
+        });
+    }
   } else {
     res.json({
       message: "This field is not empty",
     });
   }
 };
-
 
 // get all readings isRead = false
 const allReadingsFalse = async (req, res) => {
@@ -56,7 +62,7 @@ const allReadingsFalse = async (req, res) => {
         console.log(result);
         res.status(200).json(result);
       } else {
-        res.status(400).json("all readings is read!!");
+        res.status(404).json("all readings is read!!");
       }
     })
     .catch((err) => {
@@ -83,7 +89,7 @@ const allReadingsTrue = async (req, res) => {
 
 // edit Readings by id (for User only)
 const editReadings = async (req, res) => {
-  const { readingId } = req.params
+  const { readingId } = req.params;
   const {
     beforeBreakfast,
     afterBreakfast,
@@ -93,7 +99,7 @@ const editReadings = async (req, res) => {
     afterDinner,
     beforeSleep,
   } = req.body;
-  console.log(beforeBreakfast,typeof beforeBreakfast,readingId,"here");
+  console.log(beforeBreakfast, typeof beforeBreakfast, readingId, "here");
   readingsModel
 
     .findOneAndUpdate(
@@ -115,7 +121,7 @@ const editReadings = async (req, res) => {
     )
     .then((result) => {
       console.log(result, "result");
-      if (result) {
+      if (result.length > 0) {
         res.status(200).json(result);
       } else {
         res.status(404).json({
@@ -137,8 +143,7 @@ const allReadingsFalseDoctor = async (req, res) => {
     _id: req.token.id,
     role: process.env.DOCTOR_ROLE,
     status: process.env.ACCEPTED_STATUS,
-  }).populate("byUser")
-
+  });
   if (found) {
     readingsModel
       .find({ isRead: false, isDel: false, byUser: user })
@@ -200,11 +205,10 @@ const editReadingsStatus = async (req, res) => {
     role: process.env.DOCTOR_ROLE,
     status: process.env.ACCEPTED_STATUS,
   });
-
   if (found) {
     readingsModel
       .updateMany(
-        { isRead: false, byUser: user },
+        { $set: { isRead: false, byUser: user } },
         { isRead: true },
         { new: true }
       )
@@ -225,21 +229,25 @@ const editReadingsStatus = async (req, res) => {
   }
 };
 
-
-
-
 const alluserWithNewReadings = async (req, res) => {
-
-const found = await readingsModel.find({toDoctor: req.token.id, isRead:false}).populate("byUser").then((result)=>{
-  res.status(200).json(result)
-
-}).catch((err)=>{
-  console.log(err);
-  res.json(err)
-})
-  
-
-
+  console.log(req.token.id);
+  readingsModel
+    .find({ toDoctor: req.token.id, isRead: false })
+    .populate("byUser")
+    .then((result) => {
+      if (result) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({
+          message: `all Readings Status is Read`,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json(err);
+    });
 };
 
 module.exports = {
@@ -250,5 +258,5 @@ module.exports = {
   allReadingsFalseDoctor,
   allReadingTrueDoctor,
   editReadingsStatus,
-  alluserWithNewReadings
+  alluserWithNewReadings,
 };

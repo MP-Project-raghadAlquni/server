@@ -19,7 +19,7 @@ userRouter.put("/doctorProfile/:id", editDoctorProfile);
 
 userRouter.post("/patientRegister", authentication, addPatient);
 userRouter.put("/compeleteRegister", compeleteRegister);
-userRouter.get("/patient/:id", getPatientById)
+userRouter.get("/patient/:id", authentication ,getPatientById)
 userRouter.put("/patientProfile", authentication , editPatientProfile);
 userRouter.get("/verfiedPatients", authentication, getAllVerfiedPatients);
 

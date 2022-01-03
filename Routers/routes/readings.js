@@ -17,5 +17,4 @@ readingsRouter.get("/newReadings", authentication, alluserWithNewReadings);
 readingsRouter.get("/trueReadings/:user", authentication, allReadingTrueDoctor);
 readingsRouter.put("/editReadingsStatus/:user", authentication, editReadingsStatus);
 
-
 module.exports = readingsRouter;

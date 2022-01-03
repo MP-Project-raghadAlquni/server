@@ -14,7 +14,7 @@ const appointmentSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  clinic: { type: String, required: true },
+  clinic: { type: String },
   isDone: { type: Boolean, required: true, default: false },
 });
 

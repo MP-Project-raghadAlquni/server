@@ -274,15 +274,17 @@ const compeleteRegister = async (req, res) => {
 // get one patient is vervified
 const getPatientById = async (req, res) => {
   const { id } = req.params;
-
   userModel
-    .findOne({
+  .findOne({
       _id: id,
       role: process.env.PATIENT_ROLE,
       status: process.env.VERIFIED_STATUS,
+      doctor: req.token.id,
     })
+    .populate("doctor")
     .then((result) => {
-      if (result) res.status(200).json(result);
+      if (result) 
+      res.status(200).json(result);
       else
         res.status(404).json({ message: "this patient is not verified yet!!" });
     })
