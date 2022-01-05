@@ -26,7 +26,7 @@ const readingsRouter = require("./Routers/routes/readings");
 app.use(readingsRouter);
 
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000 ;
 app.listen(PORT, () => {
   console.log(`server run on ${PORT}`);
 });

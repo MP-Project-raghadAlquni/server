@@ -9,22 +9,23 @@ const { forUser } = req.params;
 console.log(req.token);
 const { day, date, hours, clinic } = req.body;
   const found = await appointmentModel.findOne({
-    day: day,
+    hours: hours,
     date: date,
-    clinic: clinic,
+    byDoctor: req.token.id
   })
   if (!found) {
     const newAppointment = new appointmentModel({
       day,
       date,
       hours,
-      clinic,
       forUser: forUser,
       byDoctor: req.token.id,
-    });
+      clinic,
+    })
     newAppointment
       .save()
       .then((result) => {
+        console.log(result,"<=======");
         res.status(201).json(result);
       })
       .catch((err) => {
@@ -59,6 +60,27 @@ appointmentModel
         res.status(400).json(err);
       });
 }
+
+
+const getAppointmentOneUser = async (req, res) => {
+  const { id } = req.params
+  appointmentModel
+      .find({ forUser: id , byDoctor: req.token.id})
+      .then((result) => {
+          if(result) {
+              res.status(200).json(result);
+            } else {
+              res
+                  .status(404)
+                  .json({
+                    message: `Patient with ID ${forUser} dosn't have any appointments!!`,
+                  });
+            }
+      })
+      .catch((err) => {
+          res.status(400).json(err);
+        });
+  }
 
 const getAppointmentsForDoctors = async (req, res) => {
   appointmentModel
@@ -101,11 +123,11 @@ appointmentModel
 }
 
 
-// get all Appointment for one patient (isDone = true)
+// get all Appointment for one patient
 const getOneAppointment = async (req, res) => {
-    const { appointmentId} = req.params;
+    const { appointmentId } = req.params;
 appointmentModel
-    .findOne({ forUser: req.token.id, _id: appointmentId})
+    .find({ forUser: req.token.id, _id: appointmentId})
     .then((result) => {
         if(result) {
             res.status(200).json(result);
@@ -116,4 +138,4 @@ appointmentModel
       });
 }
 
-module.exports = { newAppointment, getAppointments, getDoneAppointments, getOneAppointment, getAppointmentsForDoctors};
+module.exports = { newAppointment, getAppointments, getDoneAppointments, getOneAppointment, getAppointmentsForDoctors, getAppointmentOneUser};

@@ -4,7 +4,7 @@ const dossesModel = require("./../../db/models/dossesSchema");
 const newDosses = async (req, res) => {
   const { forUser } = req.params;
   console.log(req.token);
-  const { insulineType1, insulineType2 } = req.body;
+  const { insulineType1, insulineType2, insulineType1Dosses, insulineType2Dosses} = req.body;
   const found = await dossesModel.findOne({
     insulineType1: insulineType1,
     insulineType2: insulineType2,
@@ -14,6 +14,8 @@ const newDosses = async (req, res) => {
     const newDosses = new dossesModel({
       insulineType1,
       insulineType2,
+      insulineType1Dosses,
+      insulineType2Dosses,
       forUser: forUser,
       byDoctor: req.token.id,
     });
@@ -38,7 +40,10 @@ const editDosses = async (req, res) => {
     const { forUser } = req.params;
   const {
     insulineType1,
-    insulineType2
+    insulineType2,
+    insulineType1Dosses,
+    insulineType2Dosses,
+    note,
   } = req.body;
  
   dossesModel
@@ -50,6 +55,9 @@ const editDosses = async (req, res) => {
     {
         insulineType1,
         insulineType2,
+        insulineType1Dosses,
+        insulineType2Dosses,
+        note,
     },
     { new: true })
     .then((result) => {
@@ -92,7 +100,7 @@ const getAllDossesForUser = async (req, res) => {
 const getAllDossesForDoctor = async (req, res) => {
     const { forUser } = req.params;
     dossesModel
-        .findOne({ byDoctor: req.token.id,  forUser: forUser})
+        .find({ byDoctor: req.token.id,  forUser: forUser})
         .then((result) => {
             if(result) {
                 res.status(200).json(result);
