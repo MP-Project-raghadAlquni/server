@@ -9,7 +9,8 @@ const secret = process.env.SECRET_KEY;
 
 // register for ""doctor"" only
 const signUp = async (req, res) => {
-  const { password, fullName, email, fileNumber } = req.body;
+  const { password, fullName, email, fileNumber, internationalId, certificates, letter, gender, license } = req.body;
+  console.log(req.body);
   const salt = Number(process.env.SALT);
   const savedFullName = fullName.toLowerCase();
 
@@ -21,6 +22,11 @@ const signUp = async (req, res) => {
     const newUser = new userModel({
       fileNumber,
       email,
+      internationalId,
+      certificates,
+      letter,
+      license,
+      gender,
       fullName: savedFullName,
       password: savedPassword,
       role: "61c087973bd70fbf7ad59b52",
@@ -144,7 +150,6 @@ const getAllDoctorBinding = (req, res) => {
 // put all doctor status = PENDING to REJECTED
 const rejectedStatusUpdate = (req, res) => {
   const { id } = req.params;
-
   userModel
     .findOneAndUpdate(
       {
@@ -470,7 +475,7 @@ const spamUserFromAdmin = (req, res) => {
 
 const getAllUserForAdmin = (req, res) => {
   userModel
-    .find({})
+    .find({}).populate("role status")
     .then((result) => {
       if (result) {
         console.log(result);
@@ -478,6 +483,80 @@ const getAllUserForAdmin = (req, res) => {
       } else {
         res.status(404).json({ message: "There is no User yet!!" });
       }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+
+// get all doctor status = ACCEPTED
+const getAllDoctorAcceotedToAdmin = (req, res) => {
+  userModel
+    .find({ role: process.env.DOCTOR_ROLE, status: process.env.ACCEPTED_STATUS })
+    .then((result) => {
+      if (result.length > 0) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(400).json("there is no Doctor yet!!");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+const getAllPatientsverifiedToAdmin = (req, res) => {
+  userModel
+    .find({ role: process.env.PATIENT_ROLE, status: process.env.VERIFIED_STATUS })
+    .then((result) => {
+      if (result.length > 0) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(400).json("there is no patient yet!!");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+
+
+const getAllDoctorBindingAdmin = (req, res) => {
+  userModel
+    .find({ role: process.env.DOCTOR_ROLE, status: process.env.PENDING_STATUS })
+    .then((result) => {
+      if (result.length > 0) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(400).json("there is no pendings users!!");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+
+
+const getPendingDoctorById = async (req, res) => {
+  const { id } = req.params;
+  userModel
+  .findOne({
+      _id: id,
+      role: process.env.DOCTOR_ROLE,
+      status: process.env.PENDING_STATUS,
+    })
+    .populate("doctor")
+    .then((result) => {
+      if (result) 
+      res.status(200).json(result);
+      else
+        res.status(404).json({ message: "this doctor is not pendings!!" });
     })
     .catch((err) => {
       res.status(400).json(err);
@@ -500,5 +579,9 @@ module.exports = {
   getAllPatientDoctor,
   editDoctorProfile,
   spamUserFromAdmin,
-  getAllUserForAdmin
+  getAllUserForAdmin,
+  getAllDoctorAcceotedToAdmin,
+  getAllPatientsverifiedToAdmin,
+  getAllDoctorBindingAdmin,
+  getPendingDoctorById
 };
