@@ -1,5 +1,5 @@
 const express = require("express");
-const { signUp, login, getAllDoctor, getAllDoctorBinding, rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile, getAllVerfiedPatients, getAllPatientDoctor, editDoctorProfile, spamUserFromAdmin, getAllUserForAdmin, getAllDoctorAcceotedToAdmin, getAllPatientsverifiedToAdmin, getAllDoctorBindingAdmin, getPendingDoctorById} = require("./../controller/user");
+const { signUp, login, getAllDoctor, getAllDoctorBinding, getDoctorByIdAdmin,rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile, getAllVerfiedPatients, getAllPatientDoctor, editDoctorProfile, spamUserFromAdmin, getAllUserForAdmin, getAllDoctorAcceotedToAdmin, getAllPatientsverifiedToAdmin, getAllDoctorBindingAdmin, getPendingDoctorById, getPatientByIdAdmin} = require("./../controller/user");
 const userRouter = express.Router();
 
 const authentication = require("../middleware/authentication");
@@ -22,14 +22,18 @@ userRouter.put("/patientProfile", authentication , editPatientProfile);
 userRouter.get("/verfiedPatients", authentication, getAllVerfiedPatients);
 
 // for Admin
-userRouter.put("/spamUser/:id", authentication, authorization, spamUserFromAdmin);
+userRouter.put("/spamUser/:userId", authentication, authorization, spamUserFromAdmin);
 userRouter.get("/allUsers", authentication, authorization, getAllUserForAdmin);
 userRouter.get("/getAllDoctorAcceotedToAdmin", authentication, authorization, getAllDoctorAcceotedToAdmin);
 userRouter.get("/getAllPatientsverifiedToAdmin", authentication, authorization, getAllPatientsverifiedToAdmin);
 userRouter.get("/getAllDoctorBindingAdmin", authentication, authorization, getAllDoctorBindingAdmin);
 userRouter.get("/getPendingDoctorById/:id", authentication, authorization, getPendingDoctorById);
+userRouter.get("/onePatient/:id",  authentication, authorization, getPatientByIdAdmin);
+userRouter.get("/oneDoctor/:id",  authentication, authorization, getDoctorByIdAdmin);
+
 userRouter.put("/rejectedStatus/:id", authentication, authorization, rejectedStatusUpdate);
 userRouter.put("/acceptedStatus/:id",  authentication, authorization, acceptedStatusUpdate);
+userRouter.get("/acceptedStatus/:id",  authentication, authorization, acceptedStatusUpdate);
 
 
 
