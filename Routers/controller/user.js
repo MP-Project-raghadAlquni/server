@@ -452,7 +452,7 @@ const spamUserFromAdmin = (req, res) => {
   userModel
   .findOneAndUpdate(
     {
-      id: userId,
+      _id: userId,
     },
     {
       status: process.env.SPAM_STATUS
@@ -461,6 +461,7 @@ const spamUserFromAdmin = (req, res) => {
   )
   .then((result) => {
     if(result) {
+      console.log(result);
       res.status(200).json(result);
     } else {
       res
@@ -564,6 +565,43 @@ const getPendingDoctorById = async (req, res) => {
 };
 
 
+const getPatientByIdAdmin = async (req, res) => {
+  const { id } = req.params;
+  userModel
+  .findOne({
+      _id: id,
+      role: process.env.PATIENT_ROLE,
+      status: process.env.VERIFIED_STATUS,
+    })
+    .then((result) => {
+      if (result) 
+      res.status(200).json(result);
+      else
+        res.status(404).json({ message: "this patient is not verified yet!!" });
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
+const getDoctorByIdAdmin = async (req, res) => {
+  const { id } = req.params;
+  userModel
+  .findOne({
+      _id: id,
+      role: process.env.DOCTOR_ROLE,
+      status: process.env.ACCEPTED_STATUS,
+    })
+    .then((result) => {
+      if (result) 
+      res.status(200).json(result);
+      else
+        res.status(404).json({ message: "this Doctor is not Accepted yet!!" });
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
 module.exports = {
   signUp,
   login,
@@ -583,5 +621,7 @@ module.exports = {
   getAllDoctorAcceotedToAdmin,
   getAllPatientsverifiedToAdmin,
   getAllDoctorBindingAdmin,
-  getPendingDoctorById
+  getPendingDoctorById,
+  getPatientByIdAdmin,
+  getDoctorByIdAdmin
 };
