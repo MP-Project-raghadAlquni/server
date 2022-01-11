@@ -276,6 +276,25 @@ const compeleteRegister = async (req, res) => {
     });
 };
 
+// get user by id
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  userModel
+  .findOne({
+      _id: id,
+    })
+    .populate("doctor")
+    .then((result) => {
+      if (result) 
+      res.status(200).json(result);
+      else
+        res.status(404).json({ message: "this user is not verified yet!!" });
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
+
 // get one patient is vervified
 const getPatientById = async (req, res) => {
   const { id } = req.params;
@@ -297,6 +316,8 @@ const getPatientById = async (req, res) => {
       res.status(400).json(err);
     });
 };
+
+
 
 // edit patient profile
 const editPatientProfile = async (req, res) => {
@@ -401,37 +422,36 @@ const getAllPatientDoctor = (req, res) => {
 
 
 const editDoctorProfile = async (req, res) => {
-  const { doctorId } = req.params;
-  const {
-    avatar,
+  const { _id,
+    // avatar,
     fullName,
-    internationalId,
-    password,
-    email,
+    // email,
     phoneNumber,
     age,
   } = req.body;
-  const salt = Number(process.env.SALT);
-  const savedPassword = await bcrypt.hash(password, salt);
+  // const salt = Number(process.env.SALT);
+  // const savedPassword = await bcrypt.hash(password, salt);
 
   userModel
     .findOneAndUpdate(
+
       {
-        id: doctorId,
+        _id,
         status: process.env.ACCEPTED_STATUS,
       },
       {
-        avatar,
+        // avatar,
         fullName: fullName,
-        internationalId,
-        password: savedPassword,
-        email: email,
-        phoneNumber,
-        age,
+        age: age ,
+
+        // password: savedPassword,
+        // email: email,
+        phoneNumber: phoneNumber,
       },
       { new: true }
     )
     .then((result) => {
+      console.log(result);
       if (result) {
         res.status(200).json(result);
       } else {
@@ -623,5 +643,6 @@ module.exports = {
   getAllDoctorBindingAdmin,
   getPendingDoctorById,
   getPatientByIdAdmin,
-  getDoctorByIdAdmin
+  getDoctorByIdAdmin,
+  getUserById
 };

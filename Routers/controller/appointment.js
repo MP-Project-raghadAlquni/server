@@ -44,7 +44,7 @@ const { day, date, hours, clinic } = req.body;
 const getAppointments = async (req, res) => {
 appointmentModel
     .find({ forUser: req.token.id })
-    .populate("byDoctor")
+    .populate("byDoctor forUser")
     .then((result) => {
         if(result) {
             res.status(200).json(result);
@@ -84,7 +84,7 @@ const getAppointmentOneUser = async (req, res) => {
 
 const getAppointmentsForDoctors = async (req, res) => {
   appointmentModel
-      .find({ byDoctor: req.token.id })
+      .find({ byDoctor: req.token.id }).populate("forUser")
       .then((result) => {
           if(result) {
               res.status(200).json(result);
