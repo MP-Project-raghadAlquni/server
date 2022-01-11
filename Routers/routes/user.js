@@ -1,5 +1,5 @@
 const express = require("express");
-const { signUp, login, getAllDoctor, getAllDoctorBinding, getDoctorByIdAdmin,rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile, getAllVerfiedPatients, getAllPatientDoctor, editDoctorProfile, spamUserFromAdmin, getAllUserForAdmin, getAllDoctorAcceotedToAdmin, getAllPatientsverifiedToAdmin, getAllDoctorBindingAdmin, getPendingDoctorById, getPatientByIdAdmin} = require("./../controller/user");
+const { signUp, login, getAllDoctor, getAllDoctorBinding, getDoctorByIdAdmin,rejectedStatusUpdate, acceptedStatusUpdate, addPatient, compeleteRegister, getPatientById, editPatientProfile, getAllVerfiedPatients, getAllPatientDoctor, editDoctorProfile, spamUserFromAdmin, getAllUserForAdmin, getAllDoctorAcceotedToAdmin, getAllPatientsverifiedToAdmin, getAllDoctorBindingAdmin, getPendingDoctorById, getPatientByIdAdmin, getUserById} = require("./../controller/user");
 const userRouter = express.Router();
 
 const authentication = require("../middleware/authentication");
@@ -11,7 +11,7 @@ userRouter.post("/login", login);
 userRouter.get("/acceptedDoctors", getAllDoctor);
 userRouter.get("/bendingsDoctor", getAllDoctorBinding);
 userRouter.get("/patientsForDoctor", authentication, getAllPatientDoctor);
-userRouter.put("/doctorProfile/:id", editDoctorProfile);
+userRouter.put("/doctorProfile/:doctorId", authentication,editDoctorProfile);
 
 
 
@@ -36,6 +36,7 @@ userRouter.put("/acceptedStatus/:id",  authentication, authorization, acceptedSt
 userRouter.get("/acceptedStatus/:id",  authentication, authorization, acceptedStatusUpdate);
 
 
+userRouter.get("/users/:id", authentication ,getUserById)
 
 
 
